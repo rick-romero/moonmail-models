@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.3.10",
-    "base64-url": "^1.2.2",
+    "base64-url": "^2.3.3",
     "bluebird": "^3.5.1",
     "deep-assign": "^2.0.0",
     "joi": "^13.1.1",
