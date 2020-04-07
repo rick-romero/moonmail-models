@@ -1,5 +1,4 @@
 export * from './models/model';
-export * from './models/base_model';
 export * from './models/link';
 export * from './models/open';
 export * from './models/open_report';

@@ -15,31 +15,21 @@ class ScheduledEmail extends Model {
     return 'id';
   }
 
-  static toBeSent(results = [], lastIndex = null) {
+  static toBeSent() {
     debug('= ScheduledEmail.toBeSent');
     const params = {
       TableName: this.tableName,
-      FilterExpression: 'scheduledAt < :now and scheduledAt > :before and #status = :status and attribute_not_exists(sentAt)',
+      FilterExpression: 'scheduledAt < :now and #status = :status and attribute_not_exists(sentAt)',
       ExpressionAttributeValues: {
         ':now': moment().unix(),
-        ':status': 'scheduled',
-        ':before': 1533838396 //GMT Thursday, 9 August 2018 18:13:16, registers before this date should be ignored for now
+        ':status': 'scheduled'
       },
       ExpressionAttributeNames: {
         '#status': 'status'
-      },
-      ExclusiveStartKey: lastIndex
+      }
     };
     return this._client('scan', params)
-      .then(result => {
-        if(result.LastEvaluatedKey != null){
-          const newResult = [...result.Items, ...results]
-          return this.toBeSent(newResult, result.LastEvaluatedKey)
-        }else{
-          const newResult = [...result.Items, ...results]
-          return newResult
-        }
-      });
+      .then(result => result.Items);
   }
 }
 
